@@ -6,11 +6,6 @@ import { Option } from "./interfaces/option";
 import Options from "./options/Options";
 import { OptionType } from "./enums/OptionType";
 
-interface OptionState {
-  [OptionType.AVAILABLE]: Option[];
-  [OptionType.SELECTED]: Option[];
-}
-
 const initialOptions: Option[] = [
   { id: "1", value: "Option 1" },
   { id: "2", value: "Option 2" },
@@ -19,7 +14,7 @@ const initialOptions: Option[] = [
 ];
 
 export default function DNDContainer() {
-  const [options, setOptions] = useState<OptionState>({
+  const [options, setOptions] = useState<{ [key: string]: Option[] }>({
     [OptionType.AVAILABLE]: initialOptions,
     [OptionType.SELECTED]: [],
   });
@@ -65,14 +60,10 @@ export default function DNDContainer() {
 
       let originOptionsCopy = [...options[draggedOption.type]];
 
-      // TODO: remove dragged from origin
       let removed = originOptionsCopy.splice(Number(draggedOption.id), 1);
 
-      // Todo: add dragged to target
-      // I'm adding the moved element to last position for now
       let targetOptionsCopy = [...options[target], ...removed];
 
-      // @ts-ignore
       setOptions({
         [draggedOption.type]: originOptionsCopy,
         [target]: targetOptionsCopy,
