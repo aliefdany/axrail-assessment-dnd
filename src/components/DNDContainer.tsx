@@ -19,10 +19,10 @@ export default function DNDContainer() {
     [OptionType.SELECTED]: [],
   });
 
-  const [draggedOption, setDraggedOption] = useState<{
-    id: string;
+  const [dragged, setDragged] = useState<{
+    idx: string;
     type: OptionType;
-  }>({ id: initialOptions[0].id, type: OptionType.AVAILABLE });
+  }>({ idx: initialOptions[0].id, type: OptionType.AVAILABLE });
 
   const [target, setTarget] = useState<OptionType>(OptionType.AVAILABLE);
 
@@ -35,7 +35,7 @@ export default function DNDContainer() {
 
     const idx = String(options[type].findIndex((opt) => opt.id === id));
 
-    setDraggedOption({ id: idx, type });
+    setDragged({ idx, type });
   }
 
   function handleDragEnter(event: DragEvent) {
@@ -47,7 +47,7 @@ export default function DNDContainer() {
   }
 
   function handleDragEnd(event: DragEvent) {
-    moveOption(draggedOption.type);
+    moveOption(dragged.type);
 
     function moveOption(origin: OptionType) {
       if (!Object.values(OptionType).includes(target)) {
@@ -58,26 +58,26 @@ export default function DNDContainer() {
         return;
       }
 
-      let originOptionsCopy = [...options[draggedOption.type]];
+      let originOptionsCopy = [...options[dragged.type]];
 
-      let removed = originOptionsCopy.splice(Number(draggedOption.id), 1);
+      let removed = originOptionsCopy.splice(Number(dragged.idx), 1);
 
       let targetOptionsCopy = [...options[target], ...removed];
 
       setOptions({
-        [draggedOption.type]: originOptionsCopy,
+        [dragged.type]: originOptionsCopy,
         [target]: targetOptionsCopy,
       });
     }
   }
 
   return (
-    <div className="flex justify-center gap-4">
+    <div className="flex justify-center items-start gap-4">
       <Provider value={{ handleDragStart, handleDragEnter, handleDragEnd }}>
         <OptionsTypeContainer type={OptionType.AVAILABLE}>
           {(type: OptionType) => (
             <>
-              <h2 className="mb-4">Available Options</h2>
+              <h2 className="mb-4 text-xl font-semibold">Available Options</h2>
               <Options options={options[type]} type={type} />
             </>
           )}
@@ -86,7 +86,7 @@ export default function DNDContainer() {
         <OptionsTypeContainer type={OptionType.SELECTED}>
           {(type: OptionType) => (
             <>
-              <h2 className="mb-4">Selected Options</h2>
+              <h2 className="mb-4 text-xl font-semibold">Selected Options</h2>
               <Options options={options[type]} type={type} />
             </>
           )}

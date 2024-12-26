@@ -15,7 +15,7 @@ export default function OptionsTypeContainer({
     <div
       id={type}
       onDragEnter={handleDragEnter}
-      className="w-72 aspect-square border-2 rounded-md p-2"
+      className="w-72 border-2 rounded-md p-2"
     >
       {children(type)}
     </div>
