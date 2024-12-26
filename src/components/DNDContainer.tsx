@@ -41,9 +41,13 @@ export default function DNDContainer() {
   function handleDragEnter(event: DragEvent) {
     event.stopPropagation();
 
-    let enterType = (event.target as HTMLDivElement).id as OptionType;
+    let enterType = (event.target as HTMLDivElement).id.split(
+      "-"
+    )[0] as OptionType;
 
-    setTarget(enterType);
+    if (Object.values(OptionType).includes(enterType)) {
+      setTarget(enterType);
+    }
   }
 
   function handleDragEnd(event: DragEvent) {
